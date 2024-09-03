@@ -32,7 +32,29 @@ the only runtime configuration required for the csv extraction is a kv pair iden
 
 https://lucid.app/lucidchart/e9f98d50-ac10-4f8b-8e51-2defa8cc0a21/edit?viewport_loc=-651%2C-384%2C3976%2C2053%2C0_0&invitationId=inv_4339d442-0297-4f59-9293-a08e646ff73c
 
-I originally wanted to source these csvs from s3, process with lambda, and write transformed data back to s3.  Files written to the destination bucket would be part of an Athena external table.  This would be a very cost effective way to collect and present the processed lead information.
+I originally wanted to source these csvs from s3, process with lambda, and write the transformed data back to s3.  Files written to the destination bucket would be part of an Athena external table.  This would be a very cost effective way to collect and present the processed lead information.
+
+A little more on each long term consideration:
+
+##### Files loaded by 3rd party at varying times
+
+With this proposed architecture anytime a file is dropped in s3 it would create a notification that would trigger a lambda to process it.  
+
+##### Each file is a complete refresh from the given source
+
+I wanted to have a copy of every file processed but only share the latest by source.  The mysql view vw_lead_sources shows this idea and should be transferrable to Athena
+
+##### The process will need to scale to include 100+ different source files
+
+There would be no issue from a resource perspective.  S3, SQS, Lambda, and Athena are all elastic services.  The code base would require adding a transformer per source.
+
+##### File schemas are subject to change at any given time
+
+As is this would break the transformer.  The process would then add a reference to the csv to the dead letter queue.  From here fixes could be introduced to the failing transformer and the file could be processed again.  
+
+##### Resulting leads need to be available weekly
+
+This process attempts to process files as they are dropped.  Exports from Athena could easily be made weekly.
 
 #### Time constraints
 
