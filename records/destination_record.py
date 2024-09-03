@@ -51,8 +51,3 @@ class DestinationRecord:
 
     # convert to dictionary
     dict = asdict
-
-
-
-
-    {"Operation": "1239246", "Agency Number": "", "Operation Name": "K\" Street Learning Center LLC\"", "Address": "19290 K ST", "City": "SOMERSET", "State": "TX", "Zip": "78069", "County": "BEXAR", "Phone": "830-429-1010", "Type": "Licensed Center - Child Care Program", "Status": "Full Permit", "Issue Date": "10/13/11", "Capacity": "82", "Email Address": "sylvia@kstreetlearningcenter.com", "Facility ID": "773628", "Monitoring Frequency": "", "Infant": "Y", "Toddler": "Y", "Preschool": "Y", "School": "Y", "source_name": "source3", "source_filename": "./data/source3.csv", "source_row_number": 1, "source_extract_time": 1725325593}
