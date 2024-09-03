@@ -1,0 +1,52 @@
+# Brightwheel Data Engineer Exercise
+
+## Description
+
+This service is designed to take lead data in csv format and write this lead data to a SQL like DB
+
+
+## Getting Started
+
+### How to run the service
+
+ensure python 3.11 runtime
+pip install requirements
+create mysql db and create resources in lead_sources_ddl.sql
+add your environment (see .env_sample)
+
+execute manually from the base directory:
+
+python main.py <source identifier> <path to JSON file with additional runtime config>
+
+Example
+```
+python main.py source1 localcsv_runtime_config_source1.json
+```
+
+this exercise has 3 sources (source1,source2,source3) and each has a sample runtime config to assist in running each csv.
+the only runtime configuration required for the csv extraction is a kv pair identifying where to find the file to load.
+
+### Trade Offs / What is missing given time constraints
+
+#### Ideal Architecture
+
+https://lucid.app/lucidchart/e9f98d50-ac10-4f8b-8e51-2defa8cc0a21/edit?viewport_loc=-651%2C-384%2C3976%2C2053%2C0_0&invitationId=inv_4339d442-0297-4f59-9293-a08e646ff73c
+
+I originally wanted to source these csvs from s3, process with lambda, and write transformed data back to s3.  Files written to the destination bucket would be part of an Athena external table.  This would be a very cost effective way to collect and present the processed lead information.
+
+#### Time constraints
+
+I ran into the 2 hour mark trying to write the transforms for source3.  I spent a little bit of extra time finishing it up so I could test.
+
+What else is missing:
+
+Transforms are very basic, and they are not standardized across the sources
+I wrote a logger but did not get a chance to actually add logging
+I wanted to add pytest and develop some unit tests
+I considered the library pydantic for source validation but didn't have a lot of experience with it yet
+I considered adding a mysql user that isn't root =D
+I pivoted from using Athena and put the leads into a MySQL DB instead.
+
+#### Additional notes
+
+I have spent some time recently playing around with a generic framework for doing ETL as part of my ongoing learning.  I borrowed a lot of it for this work.  It was fun to try out but may have been excessive.
